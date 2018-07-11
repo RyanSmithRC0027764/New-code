@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace New_code
 {
@@ -47,7 +48,7 @@ namespace New_code
         {
             for (int i = 2; i < table.Count; i++)
             {
-                double dI = table[i].velocity- table[i - 1].altitude;
+                double dI = table[i].velocity - table[i - 1].altitude;
                 double dt = table[i].time - table[i - 1].time;
                 table[i].velocity = dI / dt;
             }
@@ -70,7 +71,7 @@ namespace New_code
                             table.Add(new row());
                             string[] r = sr.ReadLine().Split(',');
                             table.Last().time = double.Parse(r[0]);
-                            table.Last().charge = double.Parse(r[1]);
+                            table.Last().altitude = double.Parse(r[1]);
                         }
                     }
                     calculateVelocity();
@@ -90,11 +91,12 @@ namespace New_code
                 }
                 catch (DivideByZeroException)
                 {
-                    MessageBox.Show(openFileDialog1.FileName
-        {
+                    MessageBox.Show(openFileDialog1.FileName + " divide by 0 error");
 
-   }
+
                 }
+            }
+        }
 
         private void altitudeToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -116,10 +118,10 @@ namespace New_code
             }
             chart1.ChartAreas[0].AxisX.Title = "time /s";
             chart1.ChartAreas[0].AxisY.Title = "altitude /A";
-            chart1.ChartAreas[0].RecalculateAxesScale
-
-
+            chart1.ChartAreas[0].RecalculateAxesScale();
         }
+
+
 
         private void velocityToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -143,7 +145,35 @@ namespace New_code
                 chart1.ChartAreas[0].AxisX.Title = "time /s";
                 chart1.ChartAreas[0].AxisY.Title = "velocity /A";
                 chart1.ChartAreas[0].RecalculateAxesScale();
- 
-        {
 
+            }
         }
+
+        private void accelerationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            {
+                chart1.Series.Clear();
+                chart1.ChartAreas[0].AxisX.IsMarginVisible = false;
+                Series series = new Series
+                {
+                    Name = "acceleration",
+                    Color = Color.Blue,
+                    IsVisibleInLegend = false,
+                    IsXValueIndexed = true,
+                    ChartType = SeriesChartType.Spline,
+                    BorderWidth = 2
+                };
+                chart1.Series.Add(series);
+                foreach (row r in table.Skip(1))
+                {
+                    series.Points.AddXY(r.time, r.acceleration);
+                }
+                chart1.ChartAreas[0].AxisX.Title = "time /s";
+                chart1.ChartAreas[0].AxisY.Title = "acceleration /A";
+                chart1.ChartAreas[0].RecalculateAxesScale();
+
+            }
+        }
+
+    }
+}
