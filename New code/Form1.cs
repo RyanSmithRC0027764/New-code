@@ -48,9 +48,9 @@ namespace New_code
         {
             for (int i = 2; i < table.Count; i++)
             {
-                double dI = table[i].velocity - table[i - 1].altitude;
+                double dI = table[i].velocity - table[i - 1].velocity;
                 double dt = table[i].time - table[i - 1].time;
-                table[i].velocity = dI / dt;
+                table[i].acceleration = dI / dt;
             }
         }
 
@@ -164,7 +164,7 @@ namespace New_code
                     BorderWidth = 2
                 };
                 chart1.Series.Add(series);
-                foreach (row r in table.Skip(1))
+                foreach (row r in table.Skip(2))
                 {
                     series.Points.AddXY(r.time, r.acceleration);
                 }
@@ -204,26 +204,20 @@ namespace New_code
         private void saveAsPNGToolStripMenuItem_Click(object sender, EventArgs e)
         {
             saveFileDialog1.FileName = "";
-            saveFileDialog1.Filter = "csv Files|*.csv";
+            saveFileDialog1.Filter = "png Files|*.png";
             DialogResult results = saveFileDialog1.ShowDialog();
             if (results == DialogResult.OK)
             {
                 try
                 {
-                    using (StreamWriter sw = new StreamWriter(saveFileDialog1.FileName))
-                    {
-                        sw.WriteLine("Time /s, altitude /C, velocity /A, acceleration / A/s");
-                        foreach (row r in table)
-                        {
-                            sw.WriteLine(r.time + "," + r.altitude + "," + r.velocity + "," + r.acceleration);
-                        }
-                    }
+                    chart1.SaveImage(saveFileDialog1.FileName, ChartImageFormat.Png);
                 }
                 catch
                 {
                     MessageBox.Show(saveFileDialog1.FileName + " failed to save.");
                 }
             }
+
         }
     }
 }
