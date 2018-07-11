@@ -175,5 +175,55 @@ namespace New_code
             }
         }
 
+        private void saveAsCSVToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            saveFileDialog1.FileName = "";
+            saveFileDialog1.Filter = "csv Files|*.csv";
+            DialogResult results = saveFileDialog1.ShowDialog();
+            if (results == DialogResult.OK)
+            {
+                try
+                {
+                    using (StreamWriter sw = new StreamWriter(saveFileDialog1.FileName))
+                    {
+                        sw.WriteLine("Time /s, altitude /C, velocity /A, acceleration / A/s");
+                        foreach (row r in table)
+                        {
+                            sw.WriteLine(r.time + "," + r.altitude + "," + r.velocity + "," + r.acceleration);
+                        }
+                    }
+                }
+                catch
+                {
+                    MessageBox.Show(saveFileDialog1.FileName + " failed to save.");
+
+                }
+            }
+        }
+
+        private void saveAsPNGToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            saveFileDialog1.FileName = "";
+            saveFileDialog1.Filter = "csv Files|*.csv";
+            DialogResult results = saveFileDialog1.ShowDialog();
+            if (results == DialogResult.OK)
+            {
+                try
+                {
+                    using (StreamWriter sw = new StreamWriter(saveFileDialog1.FileName))
+                    {
+                        sw.WriteLine("Time /s, altitude /C, velocity /A, acceleration / A/s");
+                        foreach (row r in table)
+                        {
+                            sw.WriteLine(r.time + "," + r.altitude + "," + r.velocity + "," + r.acceleration);
+                        }
+                    }
+                }
+                catch
+                {
+                    MessageBox.Show(saveFileDialog1.FileName + " failed to save.");
+                }
+            }
+        }
     }
 }
